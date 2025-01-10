@@ -1,0 +1,6 @@
+@NativeJwt_HostAddress = http://localhost:5029
+
+GET {{NativeJwt_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

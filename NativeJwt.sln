@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35521.163 d17.12
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NativeJwt", "NativeJwt\NativeJwt.csproj", "{716C6BCA-9A64-41DE-A82D-4FC673320C45}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JwtAuthentication", "JwtAuthentication\JwtAuthentication.csproj", "{668E80A6-2D3E-47AD-9F91-E281A138177A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Persistence", "Persistence\Persistence.csproj", "{F8B739ED-AB45-4BB4-990E-8BF02886126F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{716C6BCA-9A64-41DE-A82D-4FC673320C45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{716C6BCA-9A64-41DE-A82D-4FC673320C45}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{716C6BCA-9A64-41DE-A82D-4FC673320C45}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{716C6BCA-9A64-41DE-A82D-4FC673320C45}.Release|Any CPU.Build.0 = Release|Any CPU
+		{668E80A6-2D3E-47AD-9F91-E281A138177A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{668E80A6-2D3E-47AD-9F91-E281A138177A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{668E80A6-2D3E-47AD-9F91-E281A138177A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{668E80A6-2D3E-47AD-9F91-E281A138177A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F8B739ED-AB45-4BB4-990E-8BF02886126F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F8B739ED-AB45-4BB4-990E-8BF02886126F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F8B739ED-AB45-4BB4-990E-8BF02886126F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F8B739ED-AB45-4BB4-990E-8BF02886126F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
