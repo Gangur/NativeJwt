@@ -1,6 +1,6 @@
 ﻿namespace JwtAuthentication.Services.AuthInfo
 {
-    internal class AuthService : IAuthService
+    public class AuthService : IAuthService
     {
         public int UserId { get => _userId; }
         public string Email { get => _email; }

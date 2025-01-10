@@ -6,6 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddPersistence(builder.Configuration);
 
+// Our services
 builder.Services.AddJwtAuthenticationWithIdentityDb<AppDbContext, ApplicationUser>(builder.Configuration);
 
 builder.Services.AddControllers();
@@ -22,10 +23,14 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
+app.UseRouting();
 app.UseAuthorization();
 
-app.UseJwtAuthentication();
-
+// Our pipline
+app.UseJwtAuthentication<ApplicationUser>();
 app.MapControllers();
+
+await DbSeeder.SeedData(app);
 
 app.Run();

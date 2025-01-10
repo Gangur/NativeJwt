@@ -4,6 +4,7 @@ using JwtAuthentication.Services.AuthInfo;
 using JwtAuthentication.Services.Jwt;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -32,7 +33,7 @@ namespace JwtAuthentication
 #endif
 
             serviceCollection
-               .AddIdentity<TContext, IdentityRole>()
+               .AddIdentity<TUser, IdentityRole>()
                .AddEntityFrameworkStores<TContext>()
                .AddDefaultTokenProviders();
 
@@ -65,9 +66,25 @@ namespace JwtAuthentication
             return serviceCollection;
         }
 
-        public static IApplicationBuilder UseJwtAuthentication(this IApplicationBuilder applicationBuilder)
+        public static IApplicationBuilder UseJwtAuthentication<TUser>(this IApplicationBuilder applicationBuilder)
+            where TUser : IdentityUser
         {
             applicationBuilder.UseMiddleware<AuthMiddleware>();
+
+            applicationBuilder.UseEndpoints(endpoints =>
+            {
+                endpoints.MapGet("/get-secret", async context =>
+                {
+                    var userManager = context.RequestServices.GetRequiredService<UserManager<TUser>>();
+                    var jwtProvider = context.RequestServices.GetRequiredService<IJwtProvider>();
+
+                    var admin = await userManager.FindByEmailAsync("admin@gmail.com") ?? throw new NullReferenceException();
+                    var roles = await userManager.GetRolesAsync(admin);
+                    var token = jwtProvider.Generate(admin, roles.ToArray());
+
+                    await context.Response.WriteAsync(token);
+                });
+            }); ;
 
             return applicationBuilder;
         }

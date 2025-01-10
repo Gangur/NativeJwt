@@ -8,11 +8,11 @@ using System.Text;
 
 namespace JwtAuthentication.Services.Jwt
 {
-    internal class JwtProvider : IJwtProvider
+    public class JwtProvider : IJwtProvider
     {
         private readonly JwtAuthenticationOptions _options;
         private readonly SymmetricSecurityKey _symmetricSecurityKey;
-        internal JwtProvider(IOptions<JwtAuthenticationOptions> options)
+        public JwtProvider(IOptions<JwtAuthenticationOptions> options)
         {
             _options = options.Value;
             _symmetricSecurityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_options.Secret));

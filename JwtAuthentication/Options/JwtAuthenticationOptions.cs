@@ -1,10 +1,10 @@
 ﻿namespace JwtAuthentication.Options
 {
-    internal sealed record JwtAuthenticationOptions
+    public sealed record JwtAuthenticationOptions
     {
-        internal string Issuer { get; init; } = string.Empty;
-        internal string Audience { get; init; } = string.Empty;
-        internal string Secret { get; init; } = string.Empty;
-        internal TimeSpan ExpirationPeriod { get; init; }
+        public required string Issuer { get; init; }
+        public required string Audience { get; init; }
+        public required string Secret { get; init; }
+        public required TimeSpan ExpirationPeriod { get; init; }
     }
 }

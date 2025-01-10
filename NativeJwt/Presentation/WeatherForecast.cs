@@ -1,4 +1,4 @@
-namespace NativeJwt
+namespace NativeJwt.Presentation
 {
     public class WeatherForecast
     {
