@@ -2,13 +2,13 @@
 {
     public class AuthService : IAuthService
     {
-        public int UserId { get => _userId; }
+        public Guid UserId { get => _userId; }
         public string Email { get => _email; }
 
-        private int _userId;
+        private Guid _userId;
         private string _email = string.Empty;
 
-        public void Init(int userId, string email)
+        public void Init(Guid userId, string email)
         {
             _userId = userId;
             _email = email;

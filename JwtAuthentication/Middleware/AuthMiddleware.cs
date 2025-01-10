@@ -1,13 +1,7 @@
 ﻿using JwtAuthentication.Services.AuthInfo;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace JwtAuthentication.Middleware
 {
@@ -28,10 +22,13 @@ namespace JwtAuthentication.Middleware
 
             if (!isAllowAnonymous)
             {
-                var userId = context.User.FindFirstValue(JwtRegisteredClaimNames.NameId);
-                var email = context.User.FindFirstValue(JwtRegisteredClaimNames.Email);
+                var userId = context.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var email = context.User.FindFirstValue(ClaimTypes.Email);
 
-                authService.Init(Convert.ToInt32(userId), email!);
+                if (!string.IsNullOrEmpty(userId) && !string.IsNullOrEmpty(email))
+                {
+                    authService.Init(new Guid(userId!), email!);
+                }
             }
 
             await _next(context);
