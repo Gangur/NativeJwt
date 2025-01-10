@@ -1,4 +1,4 @@
-## JwtAuthentication - Library location
+## JwtAuthentication - Library project
 
 Key implementation in [JwtAuthentication/DependencyInjections.cs](https://github.com/Gangur/NativeJwt/blob/master/JwtAuthentication/DependencyInjections.cs):
 ```C#
@@ -10,7 +10,7 @@ public static IApplicationBuilder UseJwtAuthentication<TUser>(this IApplicationB
     where TUser : IdentityUser
 ```
 
-## NativeJwt - Web Api location
+## NativeJwt - Web Api project
 
 To register JWT services in [NativeJwt/Program.cs](https://github.com/Gangur/NativeJwt/blob/master/NativeJwt/Program.cs) (or Startup.cs):
 ```C#
@@ -31,6 +31,6 @@ app.UseJwtAuthentication<ApplicationUser>();
 ```
 > ATTENTION: The order is crucially important
 
-## Persistence - Domain and EF location
+## Persistence - Domain and EF project
 This is a project with Entity Framework and its IdentityDbContext.
 See [Persistence/AppDbContext.cs](https://github.com/Gangur/NativeJwt/blob/master/Persistence/AppDbContext.cs)
