@@ -27,7 +27,7 @@ app.UseAuthentication();
 app.UseRouting();
 app.UseAuthorization();
 
-// Our pipline
+// Our pipeline
 app.UseJwtAuthentication<ApplicationUser>();
 app.MapControllers();
 

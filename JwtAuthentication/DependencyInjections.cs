@@ -71,9 +71,9 @@ namespace JwtAuthentication
         {
             applicationBuilder.UseMiddleware<AuthMiddleware>();
 
-            applicationBuilder.UseEndpoints(endpoints =>
+            applicationBuilder.UseEndpoints(endpoints => // Here can be basic endpoints like login 
             {
-                endpoints.MapGet("/get-secret", async context =>
+                endpoints.MapGet("/get-secret", async context => // For sample purpose
                 {
                     var userManager = context.RequestServices.GetRequiredService<UserManager<TUser>>();
                     var jwtProvider = context.RequestServices.GetRequiredService<IJwtProvider>();
