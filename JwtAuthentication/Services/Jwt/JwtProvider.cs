@@ -32,6 +32,23 @@ namespace JwtAuthentication.Services.Jwt
                 claims.Add(new Claim(ClaimTypes.Role, role));
             }
 
+            return GenerateTokenByClaims(claims);
+        }
+
+        public string? TryToRefrash(string jwToken)
+        {
+            var claimsPrincipal = GetPrincipalFromExpiredToken(jwToken);
+
+            if (claimsPrincipal == default) 
+            {
+                return default;
+            }
+
+            return GenerateTokenByClaims(claimsPrincipal.Claims);
+        }
+
+        private string GenerateTokenByClaims(IEnumerable<Claim> claims)
+        {
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
@@ -44,6 +61,33 @@ namespace JwtAuthentication.Services.Jwt
             var token = tokenHandler.CreateToken(tokenDescriptor);
 
             return tokenHandler.WriteToken(token);
+        }
+
+        private ClaimsPrincipal? GetPrincipalFromExpiredToken(string jwToken)
+        {
+            var tokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidIssuer = _options.Issuer,
+                ValidAudience = _options.Audience,
+                ValidateLifetime = false,
+                ClockSkew = TimeSpan.Zero,
+                IssuerSigningKey = _symmetricSecurityKey
+            };
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+
+            var principal = tokenHandler.ValidateToken(jwToken, tokenValidationParameters, out SecurityToken securityToken);
+
+            var jwtSecurityToken = securityToken as JwtSecurityToken;
+
+            if (jwtSecurityToken == null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha512))
+            {
+                return default;
+            }
+
+            return principal;
         }
     }
 }

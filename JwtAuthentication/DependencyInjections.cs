@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using System.Net;
 using System.Text;
 
 namespace JwtAuthentication
@@ -73,18 +74,52 @@ namespace JwtAuthentication
 
             applicationBuilder.UseEndpoints(endpoints => // Here can be basic endpoints like login 
             {
-                endpoints.MapGet("/get-secret", async context => // For sample purpose
+                endpoints.MapGet("/get-token", async context =>
                 {
                     var userManager = context.RequestServices.GetRequiredService<UserManager<TUser>>();
                     var jwtProvider = context.RequestServices.GetRequiredService<IJwtProvider>();
 
-                    var admin = await userManager.FindByEmailAsync("admin@gmail.com") ?? throw new NullReferenceException();
+                    var admin = await userManager.FindByEmailAsync("admin@gmail.com") ?? throw new NullReferenceException(); // For sample purpose
                     var roles = await userManager.GetRolesAsync(admin);
                     var token = jwtProvider.Generate(admin, roles.ToArray());
 
                     await context.Response.WriteAsync(token);
                 });
-            }); ;
+                endpoints.MapGet("refrash-token", async context =>
+                {
+                    var jwtProvider = context.RequestServices.GetRequiredService<IJwtProvider>();
+                    var jwtHeader = context.Request.Headers["Authorization"].ToString();
+
+                    if (string.IsNullOrEmpty(jwtHeader))
+                    {
+                        context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                        await context.Response.WriteAsync("The authorization header hasn't been found!");
+                        return;
+                    }
+
+                    var iwtSplitArray = jwtHeader.Split(' ');
+
+                    if (iwtSplitArray.Length != 2)
+                    {
+                        context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                        await context.Response.WriteAsync("The authorization header does not have the valid structure!");
+                        return;
+                    }
+
+                    var newJwt = jwtProvider.TryToRefrash(iwtSplitArray.Last());
+
+                    if (string.IsNullOrEmpty(newJwt))
+                    {
+                        context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                        await context.Response.WriteAsync("An invalid token has been provided!");
+                    }
+                    else
+                    {
+                        context.Response.StatusCode = (int)HttpStatusCode.OK;
+                        await context.Response.WriteAsync(newJwt);
+                    }
+                });
+            });
 
             return applicationBuilder;
         }
