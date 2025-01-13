@@ -1,6 +1,6 @@
 ## JwtAuthentication - Library project
 
-Key implementation in [JwtAuthentication/DependencyInjections.cs](https://github.com/Gangur/NativeJwt/blob/master/JwtAuthentication/DependencyInjections.cs):
+The key implementation in [JwtAuthentication/DependencyInjections.cs](https://github.com/Gangur/NativeJwt/blob/master/JwtAuthentication/DependencyInjections.cs):
 ```C#
 public static IServiceCollection AddJwtAuthenticationWithIdentityDb<TContext, TUser>(this IServiceCollection serviceCollection, IConfiguration configuration)
     where TContext : IdentityDbContext<TUser>
@@ -8,6 +8,30 @@ public static IServiceCollection AddJwtAuthenticationWithIdentityDb<TContext, TU
 
 public static IApplicationBuilder UseJwtAuthentication<TUser>(this IApplicationBuilder applicationBuilder)
     where TUser : IdentityUser
+```
+
+To request and refresh the token, there are two built-in endpoints:
+```C#
+public static IApplicationBuilder UseJwtAuthentication<TUser>(this IApplicationBuilder applicationBuilder)
+    where TUser : IdentityUser
+{
+    ...
+
+    const string authRoute = "jwt-auth";
+
+    applicationBuilder.UseEndpoints(endpoints => // Here can be basic endpoints like login 
+    {
+        endpoints.MapGet($"{authRoute}/get-token", async context =>
+        {
+            ...
+        });
+        endpoints.MapGet($"{authRoute}/refrash-token", async context =>
+        {
+           ...
+        });
+    });
+    ...
+}
 ```
 
 ## NativeJwt - Web Api project
