@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -44,7 +45,11 @@ namespace JwtAuthentication.Services.Jwt
                 return default;
             }
 
-            return GenerateTokenByClaims(claimsPrincipal.Claims);
+            var claims = claimsPrincipal.Claims.ToDictionary(c => c.Type, c => c);
+
+            claims.Remove("aud");
+
+            return GenerateTokenByClaims(claims.Values);
         }
 
         private string GenerateTokenByClaims(IEnumerable<Claim> claims)
