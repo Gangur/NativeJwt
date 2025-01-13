@@ -16,8 +16,19 @@ using System.Text;
 
 namespace JwtAuthentication
 {
+    /// <summary>
+    /// Dependency injections for JWT services registration
+    /// </summary>
     public static class DependencyInjections
     {
+        /// <summary>
+        /// Add JWT Authentication based on AspNetCore Identity provider
+        /// </summary>
+        /// <typeparam name="TContext">EF context, which implements IdentityDbContext</typeparam>
+        /// <typeparam name="TUser">User entity, which implements IdentityUser</typeparam>
+        /// <param name="serviceCollection">Service Collection</param>
+        /// <param name="configuration">App Configuration</param>
+        /// <returns>Service Collection</returns>
         public static IServiceCollection AddJwtAuthenticationWithIdentityDb<TContext, TUser>(this IServiceCollection serviceCollection, IConfiguration configuration)
             where TContext : IdentityDbContext<TUser>
             where TUser : IdentityUser
@@ -68,6 +79,12 @@ namespace JwtAuthentication
             return serviceCollection;
         }
 
+        /// <summary>
+        /// Add JWT Middleware and endpoints
+        /// </summary>
+        /// <typeparam name="TUser">User entity, which implements IdentityUser</typeparam>
+        /// <param name="applicationBuilder">Application Builder</param>
+        /// <returns>Application Builder</returns>
         public static IApplicationBuilder UseJwtAuthentication<TUser>(this IApplicationBuilder applicationBuilder)
             where TUser : IdentityUser
         {
@@ -109,7 +126,7 @@ namespace JwtAuthentication
                         return;
                     }
 
-                    var newJwt = jwtProvider.TryToRefrash(iwtSplitArray.Last());
+                    var newJwt = jwtProvider.TryToRefresh(iwtSplitArray.Last());
 
                     if (string.IsNullOrEmpty(newJwt))
                     {

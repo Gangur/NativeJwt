@@ -1,10 +1,12 @@
 ﻿using JwtAuthentication.Services.AuthInfo;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using System.Security.Claims;
 
 namespace JwtAuthentication.Middleware
 {
+    /// <summary>
+    /// Middleware for consuming authentication data from JWT to auth service
+    /// </summary>
     internal class AuthMiddleware
     {
         private readonly RequestDelegate _next;
@@ -30,13 +32,7 @@ namespace JwtAuthentication.Middleware
 
             if (isAuthorizeData && !isAllowAnonymous)
             {
-                var userId = context.User.FindFirstValue(ClaimTypes.NameIdentifier);
-                var email = context.User.FindFirstValue(ClaimTypes.Email);
-
-                if (!string.IsNullOrEmpty(userId) && !string.IsNullOrEmpty(email))
-                {
-                    authService.Init(new Guid(userId!), email!);
-                }
+                authService.Init(context.User);
             }
 
             await _next(context);

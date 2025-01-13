@@ -1,5 +1,11 @@
-﻿namespace JwtAuthentication.Services.AuthInfo
+﻿using System.Security.Claims;
+
+namespace JwtAuthentication.Services.AuthInfo
 {
+    /// <summary>
+    /// Authentication service basic implimintation
+    /// Can be replaced in DI
+    /// </summary>
     public class AuthService : IAuthService
     {
         public Guid UserId { get => _userId; }
@@ -8,10 +14,13 @@
         private Guid _userId;
         private string _email = string.Empty;
 
-        public void Init(Guid userId, string email)
+        public void Init(ClaimsPrincipal claimsPrincipal)
         {
-            _userId = userId;
-            _email = email;
+            var userId = claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
+            var email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
+
+            _userId = new Guid(userId!);
+            _email = email!;
         }
     }
 }

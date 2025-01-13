@@ -3,6 +3,9 @@ using Microsoft.Extensions.Options;
 
 namespace JwtAuthentication.Options
 {
+    /// <summary>
+    /// Setup for JWT authentication options
+    /// </summary>
     internal class JwtAuthenticationOptionsSetup : IConfigureOptions<JwtAuthenticationOptions>
     {
         public const string SectionName = "JwtAuthentication";
