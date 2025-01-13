@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -72,9 +73,11 @@ namespace JwtAuthentication
         {
             applicationBuilder.UseMiddleware<AuthMiddleware>();
 
+            const string authRoute = "jwt-auth";
+
             applicationBuilder.UseEndpoints(endpoints => // Here can be basic endpoints like login 
             {
-                endpoints.MapGet("/get-token", async context =>
+                endpoints.MapGet($"{authRoute}/get-token", async context =>
                 {
                     var userManager = context.RequestServices.GetRequiredService<UserManager<TUser>>();
                     var jwtProvider = context.RequestServices.GetRequiredService<IJwtProvider>();
@@ -85,7 +88,7 @@ namespace JwtAuthentication
 
                     await context.Response.WriteAsync(token);
                 });
-                endpoints.MapGet("refrash-token", async context =>
+                endpoints.MapGet($"{authRoute}/refrash-token", async context =>
                 {
                     var jwtProvider = context.RequestServices.GetRequiredService<IJwtProvider>();
                     var jwtHeader = context.Request.Headers["Authorization"].ToString();
