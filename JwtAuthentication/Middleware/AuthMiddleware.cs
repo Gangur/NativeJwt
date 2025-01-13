@@ -18,9 +18,17 @@ namespace JwtAuthentication.Middleware
             IAuthService authService)
         {
             var endpoint = context.GetEndpoint();
+
+            if (endpoint == default)
+            {
+                await _next(context);
+                return;
+            }
+
+            bool isAuthorizeData = endpoint?.Metadata?.GetMetadata<IAuthorizeData>() != null;
             bool isAllowAnonymous = endpoint?.Metadata?.GetMetadata<IAllowAnonymous>() != null;
 
-            if (!isAllowAnonymous)
+            if (isAuthorizeData && !isAllowAnonymous)
             {
                 var userId = context.User.FindFirstValue(ClaimTypes.NameIdentifier);
                 var email = context.User.FindFirstValue(ClaimTypes.Email);
